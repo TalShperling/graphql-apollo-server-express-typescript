@@ -1,21 +1,24 @@
 import { IResolverObject } from 'apollo-server-express';
 import { books } from '../data-mock/books-mock';
-import { Book } from '../models/Book';
+import { IBook } from '../models/books/Book';
+import { IBookMutationResponse } from '../models/books/BookMutationResponse';
 
 export const booksQueries: IResolverObject = {
   books: () => {
     return books;
   },
-  book: (_, { bookId }) => books.find((book: Book) => book._id === bookId),
+  book: (_, { bookId }: { bookId: String }) => books.find((book: IBook) => book._id === bookId),
 };
 
 export const booksMutations: IResolverObject = {
-  createBook: (_, { bookToAdd }) => {
-    if (books.filter((book: Book) => book._id === bookToAdd._id).length) {
+  createBook: (_, { bookToAdd }: { bookToAdd: IBook }) => {
+    const duplicateBooks: IBook[] = books.filter((book: IBook) => book._id === bookToAdd._id)
+    if (duplicateBooks.length) {
       return {
         success: false,
         message: `ID is already exists, id: ${bookToAdd._id}`,
-      };
+        books: duplicateBooks
+      } as IBookMutationResponse;
     }
 
     books.push(bookToAdd);
@@ -23,30 +26,45 @@ export const booksMutations: IResolverObject = {
     return {
       success: true,
       message: 'book was successfully added',
-      books: books,
-    };
+      book: bookToAdd,
+    } as IBookMutationResponse;;
   },
-  updateBook: (_, { bookToUpdate }) => {
-    let bookInList: Book | undefined = books.find((book: Book) => book._id === bookToUpdate._id);
+  updateBook: (_, { bookToUpdate }: { bookToUpdate: IBook }) => {
+    let bookInList: IBook | undefined = books.find((book: IBook) => book._id === bookToUpdate._id);
 
     if (bookInList) {
-      books.forEach((book: Book) => {
-        if (book._id === bookToUpdate._id) {
-          book = bookToUpdate;
-        }
-      });
+      Object.assign(bookInList, bookToUpdate);
 
       return {
         success: true,
-        message: `book was updated successfully.`,
+        message: `Book was updated successfully.`,
+        book: bookInList,
+      } as IBookMutationResponse;;
+    } else {
+      return {
+        success: false,
+        message: 'Book does not exists',
+        books: books,
+      } as IBookMutationResponse;;
+    }
+  },
+  /*deleteBook: (_, { bookIdToDelete }) => {
+    let bookToDelete: IBook | undefined = books.find((book: IBook) => book._id === bookIdToDelete);
+
+    if (bookToDelete) {
+      books = books.filter(book => book.id !== bookIdToDelete);
+
+      return {
+        success: true,  
+        message: `Book was deleted successfully.`,
         books: books,
       };
     } else {
       return {
         success: false,
-        message: 'book does not exists',
+        message: 'Book Id was not found',
         books: books,
       };
     }
-  },
+  },*/
 };

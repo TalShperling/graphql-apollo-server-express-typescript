@@ -1,6 +1,6 @@
-import { Book } from '../models/Book';
+import { IBook } from '../models/books/Book';
 
-export let books: Book[] = [
+export let books: IBook[] = [
   {
     _id: '1',
     title: 'Harry Potter and the Chamber of Secrets',

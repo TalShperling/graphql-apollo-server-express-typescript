@@ -5,5 +5,6 @@ export const bookMutationResponse: ITypedef = gql`
     success: Boolean!
     message: String!
     books: [Book]
+    book: Book
   }
 `;
