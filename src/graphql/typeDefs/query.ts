@@ -1,7 +1,8 @@
-const { gql } = require("apollo-server");
+import { gql } from 'apollo-server-express';
 
-export const query = gql`
-type Query {
-  books: [Book]
-}
+export const queryType = gql`
+  type Query {
+    books: [Book]
+    book(bookId: String!): Book
+  }
 `;

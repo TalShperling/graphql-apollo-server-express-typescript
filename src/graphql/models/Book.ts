@@ -1,4 +1,5 @@
 export interface Book {
-    title:String;
-    author:String;
+  _id: String;
+  title: String;
+  author: String;
 }
