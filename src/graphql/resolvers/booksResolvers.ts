@@ -12,11 +12,11 @@ export const booksQueries: IResolverObject = {
 
 export const booksMutations: IResolverObject = {
   createBook: async (_, { bookToAdd }: { bookToAdd: IBook }) => {
-    const duplicatedBook: void | IBook = await getBookById(bookToAdd._id);
+    const duplicatedBook: void | IBook = await getBookById(bookToAdd.id);
     if (duplicatedBook) {
       return {
         success: false,
-        message: `ID is already exists, id: ${duplicatedBook._id}`,
+        message: `ID is already exists, id: ${duplicatedBook.id}`,
         books: await getAllBooks(),
         book: duplicatedBook,
       } as IBookMutationResponse;
@@ -32,7 +32,7 @@ export const booksMutations: IResolverObject = {
     } as IBookMutationResponse;
   },
   updateBook: async (_, { bookToUpdate }: { bookToUpdate: IBook }) => {
-    const bookInList: IBook | void = await getBookById(bookToUpdate._id);
+    const bookInList: IBook | void = await getBookById(bookToUpdate.id);
 
     if (bookInList) {
       Object.assign(bookInList, bookToUpdate);

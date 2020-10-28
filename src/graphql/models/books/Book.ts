@@ -1,5 +1,5 @@
 export interface IBook {
-  _id: String;
+  id: String;
   title: String;
   author: String;
 }
