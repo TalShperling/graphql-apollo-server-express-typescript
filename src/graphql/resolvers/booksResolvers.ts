@@ -1,36 +1,36 @@
 import { IResolverObject } from 'apollo-server-express';
-import { books } from '../data-mock/books-mock';
+import { addBook, deleteBookById, getAllBooks, getBookById } from '../../utils/bookDataSource';
 import { IBook } from '../models/books/Book';
 import { IBookMutationResponse } from '../models/books/BookMutationResponse';
 
 export const booksQueries: IResolverObject = {
-  books: () => {
-    return books;
+  books: async () => {
+    return await getAllBooks();
   },
-  book: (_, { bookId }: { bookId: String }) => books.find((book: IBook) => book._id === bookId),
+  book: async (_, { bookId }: { bookId: String }) => await getBookById(bookId),
 };
 
 export const booksMutations: IResolverObject = {
-  createBook: (_, { bookToAdd }: { bookToAdd: IBook }) => {
-    const duplicateBooks: IBook[] = books.filter((book: IBook) => book._id === bookToAdd._id)
-    if (duplicateBooks.length) {
+  createBook: async (_, { bookToAdd }: { bookToAdd: IBook }) => {
+    const duplicatedBook: void | IBook = await getBookById(bookToAdd._id);
+    if (duplicatedBook) {
       return {
         success: false,
-        message: `ID is already exists, id: ${bookToAdd._id}`,
-        books: duplicateBooks
+        message: `ID is already exists, id: ${duplicatedBook._id}`,
+        book: duplicatedBook,
       } as IBookMutationResponse;
     }
 
-    books.push(bookToAdd);
+    await addBook(bookToAdd);
 
     return {
       success: true,
       message: 'book was successfully added',
       book: bookToAdd,
-    } as IBookMutationResponse;;
+    } as IBookMutationResponse;
   },
-  updateBook: (_, { bookToUpdate }: { bookToUpdate: IBook }) => {
-    let bookInList: IBook | undefined = books.find((book: IBook) => book._id === bookToUpdate._id);
+  updateBook: async (_, { bookToUpdate }: { bookToUpdate: IBook }) => {
+    const bookInList: IBook | void = await getBookById(bookToUpdate._id);
 
     if (bookInList) {
       Object.assign(bookInList, bookToUpdate);
@@ -39,32 +39,40 @@ export const booksMutations: IResolverObject = {
         success: true,
         message: `Book was updated successfully.`,
         book: bookInList,
-      } as IBookMutationResponse;;
+      } as IBookMutationResponse;
     } else {
       return {
         success: false,
         message: 'Book does not exists',
-        books: books,
-      } as IBookMutationResponse;;
+        books: await getAllBooks(),
+      } as IBookMutationResponse;
     }
   },
-  /*deleteBook: (_, { bookIdToDelete }) => {
-    let bookToDelete: IBook | undefined = books.find((book: IBook) => book._id === bookIdToDelete);
+  deleteBook: async (_, { bookIdToDelete }) => {
+    let bookToDelete: IBook | void = await getBookById(bookIdToDelete);
 
     if (bookToDelete) {
-      books = books.filter(book => book.id !== bookIdToDelete);
+      await deleteBookById(bookIdToDelete);
 
       return {
-        success: true,  
+        success: true,
         message: `Book was deleted successfully.`,
-        books: books,
+        books: await getAllBooks(),
       };
     } else {
       return {
         success: false,
         message: 'Book Id was not found',
-        books: books,
+        books: await getAllBooks(),
       };
     }
-  },*/
+  },
+};
+
+const catchError = async () => {
+  return {
+    success: false,
+    message: `An error has occurred.`,
+    books: await getAllBooks(),
+  } as IBookMutationResponse;
 };
