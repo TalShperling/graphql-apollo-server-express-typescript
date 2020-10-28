@@ -17,6 +17,7 @@ export const booksMutations: IResolverObject = {
       return {
         success: false,
         message: `ID is already exists, id: ${duplicatedBook._id}`,
+        books: await getAllBooks(),
         book: duplicatedBook,
       } as IBookMutationResponse;
     }
@@ -26,6 +27,7 @@ export const booksMutations: IResolverObject = {
     return {
       success: true,
       message: 'book was successfully added',
+      books: await getAllBooks(),
       book: bookToAdd,
     } as IBookMutationResponse;
   },
@@ -38,6 +40,7 @@ export const booksMutations: IResolverObject = {
       return {
         success: true,
         message: `Book was updated successfully.`,
+        books: await getAllBooks(),
         book: bookInList,
       } as IBookMutationResponse;
     } else {
