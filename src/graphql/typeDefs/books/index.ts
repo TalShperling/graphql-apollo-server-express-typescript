@@ -1,6 +1,6 @@
-import { ITypedef } from 'apollo-server-express';
 import { bookMutationResponse } from './bookMutationResponse';
 import { bookInputType } from './bookInputType';
 import { bookType } from './bookType';
+import { DocumentNode } from 'graphql';
 
-export const bookTypeDefs: ITypedef[] = [bookType, bookInputType, bookMutationResponse];
+export const bookTypeDefs: DocumentNode[] = [bookType, bookInputType, bookMutationResponse];

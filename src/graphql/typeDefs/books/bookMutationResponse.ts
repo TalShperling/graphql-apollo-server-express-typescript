@@ -1,6 +1,7 @@
-import { gql, ITypedef } from 'apollo-server-express';
+import { gql } from 'apollo-server-express';
+import { DocumentNode } from 'graphql';
 
-export const bookMutationResponse: ITypedef = gql`
+export const bookMutationResponse: DocumentNode = gql`
   type BookMutationResponse {
     success: Boolean!
     message: String!

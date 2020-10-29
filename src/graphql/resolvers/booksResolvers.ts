@@ -71,11 +71,3 @@ export const booksMutations: IResolverObject = {
     }
   },
 };
-
-const catchError = async () => {
-  return {
-    success: false,
-    message: `An error has occurred.`,
-    books: await getAllBooks(),
-  } as IBookMutationResponse;
-};

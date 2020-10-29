@@ -1,6 +1,7 @@
-import { gql, ITypedef } from 'apollo-server-express';
+import { gql } from 'apollo-server-express';
+import { DocumentNode } from 'graphql';
 
-export const bookType: ITypedef = gql`
+export const bookType: DocumentNode = gql`
   type Book {
     id: ID!
     title: String!
