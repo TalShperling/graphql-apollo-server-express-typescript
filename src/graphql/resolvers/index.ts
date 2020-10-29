@@ -1,14 +1,8 @@
-import { IResolvers } from 'apollo-server-express';
+import { GraphQLResolverMap } from 'apollo-graphql';
 import { booksQueries, booksMutations } from './booksResolvers';
 
-export const resolvers: IResolvers = {
-  Query: {
-    ...booksQueries,
-  },
-  Mutation: {
-    ...booksMutations,
-  },
-  //   Subscription: {
-  //     ...UserSubscription
-  //   }
+export const resolvers: GraphQLResolverMap<any> = {
+  ...booksQueries,
+  ...booksMutations,
+  //...booksSubscription
 };
