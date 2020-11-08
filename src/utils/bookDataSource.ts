@@ -1,5 +1,9 @@
 import { IBook } from '../graphql/models/books/Book';
 
+/**
+ * A fake data source and data source API.
+ * It holds a list of books which you can manipulate by CRUD operations using mutations.
+ */
 let books: IBook[] = [
   {
     id: '1',
@@ -13,25 +17,26 @@ let books: IBook[] = [
   },
 ];
 
-const getAllBooks = async (): Promise<IBook[]> => {
-  return books;
+export const getAllBooks = async (): Promise<IBook[]> => {
+  return Promise.resolve(books);
 };
 
-const getBookById = async (bookId: String): Promise<IBook | void> => {
-  return books.find((book) => book.id === bookId);
+export const getBookById = async (bookId: string): Promise<IBook | void> => {
+  return Promise.resolve(books.find((book) => book.id === bookId));
 };
 
-const addBook = async (newBook: IBook): Promise<void> => {
+export const addBook = async (newBook: IBook): Promise<void> => {
   books.push(newBook);
+  return Promise.resolve();
 };
 
-const deleteBookById = async (bookId: String): Promise<void> => {
+export const deleteBookById = async (bookId: String): Promise<void> => {
   books = books.filter((book: IBook) => book.id !== bookId);
+  return Promise.resolve();
 };
 
-const updateBookById = async (updatedBook: IBook): Promise<void> => {
+export const updateBook = async (updatedBook: IBook): Promise<void> => {
   let book: IBook | void = await getBookById(updatedBook.id);
   Object.assign(book, updatedBook);
+  return Promise.resolve();
 };
-
-export { getAllBooks, getBookById, addBook, deleteBookById, updateBookById };

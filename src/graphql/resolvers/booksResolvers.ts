@@ -15,7 +15,7 @@ export const booksQueries: GraphQLResolverMap = {
 export const booksMutations: GraphQLResolverMap = {
   Mutation: {
     createBook: async (_, { bookToAdd }) => {
-      const duplicatedBook: void | IBook = await getBookById(bookToAdd.id);
+      const duplicatedBook: IBook | void = await getBookById(bookToAdd.id);
       if (duplicatedBook) {
         return {
           success: false,

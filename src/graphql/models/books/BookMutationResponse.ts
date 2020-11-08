@@ -1,8 +1,8 @@
 import { IBook } from './Book';
 
 export interface IBookMutationResponse {
-  success: Boolean;
-  message: String;
+  success: boolean;
+  message: string;
   books: IBook[];
   book?: IBook;
 }
