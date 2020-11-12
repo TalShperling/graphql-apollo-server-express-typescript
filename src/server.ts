@@ -20,13 +20,16 @@ const app: Application = express();
 const server: ApolloServer = new ApolloServer({
   schema,
   validationRules: [depthLimit(7)],
-  playground: true,
+  playground: {
+    cdnUrl: `http://localhost:5678`,
+    version: "1.0.0"
+  },
 });
 
 app.use('*', cors());
 app.use(compression());
 
-server.applyMiddleware({ app, path: '/graphql' });
+server.applyMiddleware({ app });
 
 /**
  * @param {number} port -The port the app would run on.
