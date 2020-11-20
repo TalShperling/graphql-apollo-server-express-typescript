@@ -2,12 +2,10 @@ overwrite: true
 schema:
   - './src/graphql/typeDefs/**/*.ts':
       noRequire: true
-documents: null
 generates:
   src/interfaces/types.d.ts:
     plugins:
       - "typescript"
       - "typescript-resolvers"
-  ./graphql.schema.json:
-    plugins:
-      - "introspection"
+    config:
+      enumsAsTypes: true

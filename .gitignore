@@ -11,7 +11,6 @@ debug.log
 .vscode
 
 # Generated
-graphql.schema.json
 src/interfaces
 
 # Config
