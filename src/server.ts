@@ -1,9 +1,10 @@
-import express, { Application } from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import depthLimit from 'graphql-depth-limit';
 import compression from 'compression';
 import cors from 'cors';
-import schema from './graphql/schema';
+import express, { Application } from 'express';
+import depthLimit from 'graphql-depth-limit';
+import { resolvers } from './graphql/resolvers/index';
+import { typeDefs } from './graphql/typeDefs';
 
 /**
  * @constant PORT - the port the app will run on.
@@ -18,12 +19,10 @@ const app: Application = express();
  * @param playground - enable the graphql playground environment.
  */
 const server: ApolloServer = new ApolloServer({
-  schema,
+  typeDefs : typeDefs,
+  resolvers: resolvers as any,
   validationRules: [depthLimit(7)],
-  playground: {
-    cdnUrl: `http://localhost:5678`,
-    version: "1.0.0"
-  },
+  introspection: true
 });
 
 app.use('*', cors());

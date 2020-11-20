@@ -1,64 +1,60 @@
+import { Book, BookMutationResponse, Maybe, MutationResolvers, Resolvers } from '../../interfaces/types';
 import { addBook, deleteBookById, getAllBooks, getBookById } from '../../utils/bookDataSource';
-import { IBook } from '../models/books/Book';
-import { IBookMutationResponse } from '../models/books/BookMutationResponse';
-import { GraphQLResolverMap } from 'apollo-graphql';
 
-export const booksQueries: GraphQLResolverMap = {
+export const booksQueries: Partial<Resolvers> = {
   Query: {
-    books: async () => {
-      return await getAllBooks();
-    },
-    book: async (_, { bookId }) => await getBookById(bookId),
+    books: async () => await getAllBooks(),
+    book: async (_: any, args: { bookId: string }) => await getBookById(args.bookId),
   },
 };
 
-export const booksMutations: GraphQLResolverMap = {
+export const booksMutations: Partial<Resolvers> = {
   Mutation: {
-    createBook: async (_, { bookToAdd }) => {
-      const duplicatedBook: IBook | void = await getBookById(bookToAdd.id);
+    createBook: async (_: any, args: { bookToAdd: Book }) => {
+      const duplicatedBook: Maybe<Book> = await getBookById(args.bookToAdd.id);
       if (duplicatedBook) {
         return {
           success: false,
           message: `ID is already exists, id: ${duplicatedBook.id}`,
           books: await getAllBooks(),
           book: duplicatedBook,
-        } as IBookMutationResponse;
+        } as BookMutationResponse;
       }
 
-      await addBook(bookToAdd);
+      await addBook(args.bookToAdd);
 
       return {
         success: true,
         message: 'book was successfully added',
         books: await getAllBooks(),
-        book: bookToAdd,
-      } as IBookMutationResponse;
+        book: args.bookToAdd,
+      } as BookMutationResponse;
     },
-    updateBook: async (_, { bookToUpdate }) => {
-      const bookInList: IBook | void = await getBookById(bookToUpdate.id);
+    updateBook: async (_: any, args: { bookToUpdate: Book }) => {
+      const bookInList: Maybe<Book> = await getBookById(args.bookToUpdate.id);
 
       if (bookInList) {
-        Object.assign(bookInList, bookToUpdate);
+        Object.assign(bookInList, args.bookToUpdate);
 
         return {
           success: true,
           message: `Book was updated successfully.`,
           books: await getAllBooks(),
           book: bookInList,
-        } as IBookMutationResponse;
+        } as BookMutationResponse;
       } else {
         return {
           success: false,
           message: 'Book does not exists',
           books: await getAllBooks(),
-        } as IBookMutationResponse;
+        } as BookMutationResponse;
       }
     },
-    deleteBook: async (_, { bookIdToDelete }) => {
-      let bookToDelete: IBook | void = await getBookById(bookIdToDelete);
+    deleteBook: async (_: any, args: { bookIdToDelete: string }) => {
+      let bookToDelete: Maybe<Book> = await getBookById(args.bookIdToDelete);
 
       if (bookToDelete) {
-        await deleteBookById(bookIdToDelete);
+        await deleteBookById(args.bookIdToDelete);
 
         return {
           success: true,

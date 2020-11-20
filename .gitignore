@@ -10,6 +10,10 @@ debug.log
 .idea
 .vscode
 
+# Generated
+graphql.schema.json
+src/interfaces
+
 # Config
 conf/env.json
 .env

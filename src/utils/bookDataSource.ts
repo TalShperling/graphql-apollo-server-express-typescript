@@ -1,10 +1,10 @@
-import { IBook } from '../graphql/models/books/Book';
+import { Book, Maybe } from "../interfaces/types";
 
 /**
  * A fake data source and data source API.
  * It holds a list of books which you can manipulate by CRUD operations using mutations.
  */
-let books: IBook[] = [
+let books: Book[] = [
   {
     id: '1',
     title: 'Harry Potter and the Chamber of Secrets',
@@ -17,26 +17,27 @@ let books: IBook[] = [
   },
 ];
 
-export const getAllBooks = async (): Promise<IBook[]> => {
+export const getAllBooks = async (): Promise<Book[]> => {
   return Promise.resolve(books);
 };
 
-export const getBookById = async (bookId: string): Promise<IBook | void> => {
-  return Promise.resolve(books.find((book) => book.id === bookId));
+export const getBookById = async (bookId: string): Promise<Book | null> => {
+  let book: Book | undefined = books.find((book) => book.id === bookId);
+  return book ? Promise.resolve(book) : null;
 };
 
-export const addBook = async (newBook: IBook): Promise<void> => {
+export const addBook = async (newBook: Book): Promise<void> => {
   books.push(newBook);
   return Promise.resolve();
 };
 
 export const deleteBookById = async (bookId: String): Promise<void> => {
-  books = books.filter((book: IBook) => book.id !== bookId);
+  books = books.filter((book: Book) => book.id !== bookId);
   return Promise.resolve();
 };
 
-export const updateBook = async (updatedBook: IBook): Promise<void> => {
-  let book: IBook | void = await getBookById(updatedBook.id);
-  Object.assign(book, updatedBook);
+export const updateBook = async (updatedBook: Book): Promise<void> => {
+  let book: Maybe<Book> = await getBookById(updatedBook.id);
+  book && Object.assign(book, updatedBook);
   return Promise.resolve();
 };
