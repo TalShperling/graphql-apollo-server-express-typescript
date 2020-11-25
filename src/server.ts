@@ -1,16 +1,16 @@
-import { ApolloServer } from 'apollo-server-express';
-import compression from 'compression';
-import cors from 'cors';
-import express, { Application } from 'express';
-import depthLimit from 'graphql-depth-limit';
-import { resolvers } from './graphql/resolvers/index';
-import { typeDefs } from './graphql/typeDefs';
+import { ApolloServer } from 'apollo-server-express'
+import compression from 'compression'
+import cors from 'cors'
+import express, { Application } from 'express'
+import depthLimit from 'graphql-depth-limit'
+import { resolvers } from './graphql/resolvers/index'
+import { typeDefs } from './graphql/typeDefs'
 
 /**
  * @constant PORT - the port the app will run on.
  */
-const PORT: number = 5000;
-const app: Application = express();
+const PORT: number = 5000
+const app: Application = express()
 
 /**
  * @param schema - the service schema.
@@ -19,16 +19,16 @@ const app: Application = express();
  * @param playground - enable the graphql playground environment.
  */
 const server: ApolloServer = new ApolloServer({
-  typeDefs : typeDefs,
+  typeDefs: typeDefs,
   resolvers: resolvers as any,
   validationRules: [depthLimit(7)],
   introspection: true
-});
+})
 
-app.use('*', cors());
-app.use(compression());
+app.use('*', cors())
+app.use(compression())
 
-server.applyMiddleware({ app });
+server.applyMiddleware({ app })
 
 /**
  * @param {number} port -The port the app would run on.
@@ -36,4 +36,4 @@ server.applyMiddleware({ app });
  */
 app.listen({ port: PORT }, (): void =>
   console.log(`GraphQL is now running on http://localhost:${PORT}/graphql`)
-);
+)

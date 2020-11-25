@@ -1,5 +1,5 @@
-import { gql } from 'apollo-server-express';
-import { DocumentNode } from 'graphql';
+import { gql } from 'apollo-server-express'
+import { DocumentNode } from 'graphql'
 
 export const bookType: DocumentNode = gql`
   type Book {
@@ -7,4 +7,4 @@ export const bookType: DocumentNode = gql`
     title: String!
     author: String!
   }
-`;
+`

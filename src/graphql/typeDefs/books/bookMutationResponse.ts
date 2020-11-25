@@ -1,5 +1,5 @@
-import { gql } from 'apollo-server-express';
-import { DocumentNode } from 'graphql';
+import { gql } from 'apollo-server-express'
+import { DocumentNode } from 'graphql'
 
 export const bookMutationResponse: DocumentNode = gql`
   type BookMutationResponse {
@@ -8,4 +8,4 @@ export const bookMutationResponse: DocumentNode = gql`
     books: [Book]
     book: Book
   }
-`;
+`

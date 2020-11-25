@@ -10,7 +10,8 @@
     "start:prod": "node dist/server.js",
     "generate": "graphql-codegen --config codegen.yml",
     "build": "tsc",
-    "prepare": "npm run generate"
+    "prepare": "npm run generate",
+    "lint": "npx eslint ./src/**"
   },
   "keywords": [
     "apollo-server-express",
@@ -31,7 +32,14 @@
     "@types/graphql": "^14.5.0",
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/node": "^14.14.2",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
     "apollo-server-testing": "^2.19.0",
+    "eslint": "^7.14.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
     "graphql-import": "^1.0.2",
     "graphql-import-node": "0.0.4",
     "jsdoc": "^3.6.6",

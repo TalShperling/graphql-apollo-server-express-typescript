@@ -1,5 +1,5 @@
-import { gql } from 'apollo-server-express';
-import { DocumentNode } from 'graphql';
+import { gql } from 'apollo-server-express'
+import { DocumentNode } from 'graphql'
 
 export const mutationType: DocumentNode = gql`
   type Mutation {
@@ -7,4 +7,4 @@ export const mutationType: DocumentNode = gql`
     updateBook(bookToUpdate: BookInput!): BookMutationResponse!
     deleteBook(bookIdToDelete: ID!): BookMutationResponse!
   }
-`;
+`
