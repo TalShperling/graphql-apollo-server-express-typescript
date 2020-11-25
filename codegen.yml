@@ -1,4 +1,6 @@
 overwrite: true
+watch: 
+  - './src/graphql/typeDefs/**/*.ts'
 schema:
   - './src/graphql/typeDefs/**/*.ts':
       noRequire: true

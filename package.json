@@ -4,14 +4,13 @@
   "description": "GraphQL Apollo-Server-Express Typescript seed",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/server.ts",
-    "predev": "npm run generate",
-    "start": "npm run build && node dist/server.js",
-    "start:prod": "node dist/server.js",
-    "generate": "graphql-codegen --config codegen.yml",
     "build": "tsc",
+    "dev": "concurrently \"nodemon src/server.ts\" \"npm run generate\"",
+    "generate": "graphql-codegen --config codegen.yml",
+    "lint": "npx eslint ./src/**",
     "prepare": "npm run generate",
-    "lint": "npx eslint ./src/**"
+    "start": "npm run build && node dist/server.js",
+    "start:prod": "node dist/server.js"
   },
   "keywords": [
     "apollo-server-express",
@@ -35,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "apollo-server-testing": "^2.19.0",
+    "concurrently": "^5.3.0",
     "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
