@@ -11,9 +11,9 @@ With a use of the most popular, helpful and basic packages to start your own Apo
 npm install  
 ```
 ### Running the project
-On dev environment using "nodemon": 
+On dev environment:
 ```
-npm run start:dev
+npm run dev
 ```
 On prod environment: 
 ```
