@@ -1,5 +1,10 @@
 import { Book, BookMutationResponse, Maybe, Resolvers } from '../../interfaces/types'
+import { pubsub } from '../../server'
 import { addBook, deleteBookById, getAllBooks, getBookById } from '../../utils/bookDataSource'
+
+export const BOOK_ADDED = "BOOK_ADDED";
+export const BOOK_UPDATED = "BOOK_UPDATED";
+export const BOOK_DELETED = "BOOK_DELETED";
 
 export const booksQueries: Partial<Resolvers> = {
   Query: {
@@ -23,6 +28,8 @@ export const booksMutations: Partial<Resolvers> = {
 
       await addBook(args.bookToAdd)
 
+      pubsub.publish(BOOK_ADDED, { bookAdded: {...args.bookToAdd} as Book });
+
       return {
         success: true,
         message: 'book was successfully added',
@@ -35,6 +42,8 @@ export const booksMutations: Partial<Resolvers> = {
 
       if (bookInList) {
         Object.assign(bookInList, args.bookToUpdate)
+
+        pubsub.publish(BOOK_UPDATED, { bookUpdated: {...args.bookToUpdate} as Book });
 
         return {
           success: true,
@@ -55,6 +64,7 @@ export const booksMutations: Partial<Resolvers> = {
 
       if (bookToDelete) {
         await deleteBookById(args.bookIdToDelete)
+        pubsub.publish(BOOK_DELETED, { bookDeleted: args.bookIdToDelete });
 
         return {
           success: true,
@@ -68,6 +78,20 @@ export const booksMutations: Partial<Resolvers> = {
           books: await getAllBooks()
         }
       }
+    }
+  }
+}
+
+export const booksSubscriptions: Partial<Resolvers> = {
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(BOOK_ADDED)
+    },
+    bookUpdated: {
+      subscribe: () => pubsub.asyncIterator(BOOK_UPDATED)
+    },
+    bookDeleted: {
+      subscribe: () => pubsub.asyncIterator(BOOK_DELETED)
     }
   }
 }

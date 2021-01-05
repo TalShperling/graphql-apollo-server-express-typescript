@@ -2,15 +2,17 @@ import { ApolloServer } from 'apollo-server-express'
 import compression from 'compression'
 import cors from 'cors'
 import express, { Application } from 'express'
-import depthLimit from 'graphql-depth-limit'
 import { resolvers } from './graphql/resolvers/index'
 import { typeDefs } from './graphql/typeDefs'
+import { PubSub } from 'graphql-subscriptions';
+import http from 'http';
 
 /**
  * @constant PORT - the port the app will run on.
  */
 const PORT: number = 5000
 const app: Application = express()
+export const pubsub = new PubSub();
 
 /**
  * @param schema - the service schema.
@@ -21,19 +23,23 @@ const app: Application = express()
 const server: ApolloServer = new ApolloServer({
   typeDefs: typeDefs,
   resolvers: resolvers as any,
-  validationRules: [depthLimit(7)],
   introspection: true
 })
 
 app.use('*', cors())
 app.use(compression())
 
+const httpServer = http.createServer(app);
+
 server.applyMiddleware({ app })
+
+server.installSubscriptionHandlers(httpServer)
 
 /**
  * @param {number} port -The port the app would run on.
  * The @constant PORT is defined above.
  */
-app.listen({ port: PORT }, (): void =>
-  console.log(`GraphQL is now running on http://localhost:${PORT}/graphql`)
-)
+httpServer.listen({ port: PORT }, (): void => {
+  console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
+  console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`)
+})
