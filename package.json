@@ -54,6 +54,6 @@
     "graphql": "^15.3.0",
     "graphql-subscriptions": "^1.2.0",
     "lodash": "^4.17.20",
-    "mongodb": "^3.6.3"
+    "mongodb": "^3.6.4"
   }
 }
